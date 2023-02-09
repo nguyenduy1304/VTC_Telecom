@@ -1,0 +1,67 @@
+﻿@using SSO.Persistence.Domain
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Quản lý tài khoản</li>
+    </ol>
+</nav>
+<section class="forms">
+    <div class="card card_border py-2 mb-4">
+        <div class="card-body">
+            <div class="add_user">
+                <a href="@Url.Action("register","authentication")">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+            </div>
+            <table>
+                <tr>
+                    <th>Tài khoản</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>SĐT</th>
+                    <th></th>
+                </tr>
+                @foreach (VTC_Users vTC_Users in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("UpdateUser","Authentication", new {id = vTC_Users.Id})">
+                                @vTC_Users.UserName
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateUser","Authentication", new {id = vTC_Users.Id})">
+                                @vTC_Users.FullName
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateUser","Authentication", new {id = vTC_Users.Id})">
+                                @vTC_Users.Email
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateUser","Authentication", new {id = vTC_Users.Id})">
+                                @vTC_Users.Phone
+                            </a>
+                        </td>
+                        <td style="text-align:center">
+                            <a href="@Url.Action("DeleteUser","Authentication", new {id = vTC_Users.Id})"><i class="fas fa-user-minus"></i></a>
+                        </td>
+
+                    </tr>
+
+                }
+            </table>
+
+
+        </div>
+    </div>
+</section>
+
+

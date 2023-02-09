@@ -1,0 +1,27 @@
+﻿@model SSO.Persistence.Domain.VTC_Users
+
+@{
+    ViewBag.Title = "DeleteUser";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h3>Bạn có chắc chắn muốn xóa tài khoản <span style="color:red">@Model.UserName</span> không ?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Họ tên</dt>
+        <dd>@Html.DisplayFor(model => model.FullName)</dd>
+        <dt>Email</dt>
+        <dd>@Html.DisplayFor(model => model.Email)</dd>
+        <dt>Số điện thoại</dt>
+        <dd>@Html.DisplayFor(model => model.Phone)</dd>
+    </dl>
+
+    @using (Html.BeginForm("DeleteUserPost", "Authentication", new { id = Model.Id }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Đồng ý" class="btn btn-primary" />
+        </div>
+    }
+</div>

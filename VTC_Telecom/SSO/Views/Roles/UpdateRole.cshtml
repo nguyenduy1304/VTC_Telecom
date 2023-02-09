@@ -1,0 +1,108 @@
+﻿@using SSO.Persistence.Domain
+@using SSO.Contract.Constant
+@using SSO.Application.Services
+
+@{
+    ViewBag.Title = "UpdateRole";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+    string HOME = string.Format(ContractURL.HomePage);
+    string homepage = URL + HOME;
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item"><a href="@homepage">Trang chủ </a></li>
+        <li class="breadcrumb-item"><a href="@URL/roles">Quyền truy cập</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cập nhật quyền truy cập</li>
+    </ol>
+</nav>
+<section class="forms">
+    <div class="card card_border py-2 mb-4">
+        <div class="card-body">
+            <form>
+                <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="Name" class="input__label">Tên quyền</label>
+                        <input type="text" class="form-control input-style" id="Name" name="Name" required value="@Model.Name"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="Description" class="input__label">Mô tả của nhóm</label>
+                        <input type="text" class="form-control input-style" id="Description" name="Description" required value="@Model.Description"/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="Permission" class="input__label">Các quyền truy cập </label>
+                        <input type="text" class="form-control input-style" id="Permission" name="Permission" required value="@Model.Permission"/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="Name" class="input__label">Quyền thuộc về ứng dụng </label><br />
+                        @{
+                            String appid = Model.AppId;
+                            foreach (var item in ViewBag.App)
+                            {
+
+                                if (appid.Contains(item.AppId))
+                                {
+                                    <input type="checkbox" class="AppId" value="@item.AppId" checked="checked" />
+                                    <label for="@item.Name"> @item.Name &emsp;</label><br />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="AppId" value="@item.AppId" />
+                                    <label for="@item.Name"> @item.Name &emsp;</label> <br />
+                                }
+
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="btn btn-primary btn-style mt-4" onclick="SaveObject()">Lưu thay đổi</div>
+            </form>
+            <hr />
+        </div>
+    </div>
+</section>
+
+<script>
+    function SaveObject() {
+        var id = $('#Id').val();
+        var name = $('#Name').val();
+         var description = $('#Description').val();
+         var permission = $('#Permission').val();
+        var appid = '';
+         $('.AppId:checked').each(function () {
+             if (appid != '') appid += ';';
+             appid += $(this).val();
+        });
+        if (name.length = 0 || appid.length == 0 || permission.length == 0) {
+            alert('Chưa nhập đầy đủ thông tin, vui lòng kiểm tra lại.');
+        } else {
+            var form = new FormData();
+            form.append('Id', id);
+            form.append('Name', name);
+            form.append('Description', description);
+            form.append('Permission', permission);
+            form.append('AppId', appid);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "@URL/Roles/UpdateRolePost", true);
+            xhr.timeout = 30000;
+            xhr.ontimeout = function () {
+                alert('Hệ thống tạm thời không khả dụng! Thử lại sau ít phút.');
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var ms = JSON.parse(xhr.responseText);
+                    if (ms.Data.status == "OK") {
+                        window.location.href = "@URL/roles"
+                    }
+                }
+            }
+            xhr.send(form);
+        }
+    }
+</script>

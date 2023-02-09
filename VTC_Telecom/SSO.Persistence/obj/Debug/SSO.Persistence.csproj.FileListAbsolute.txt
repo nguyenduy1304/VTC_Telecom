@@ -1,0 +1,12 @@
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\bin\Debug\SSO.Persistence.dll.config
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\bin\Debug\SSO.Persistence.dll
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\bin\Debug\SSO.Persistence.pdb
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\bin\Debug\EntityFramework.dll
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\bin\Debug\EntityFramework.SqlServer.dll
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\bin\Debug\EntityFramework.xml
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\bin\Debug\EntityFramework.SqlServer.xml
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\obj\Debug\SSO.Persistence.csproj.AssemblyReference.cache
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\obj\Debug\SSO.Persistence.csproj.CoreCompileInputs.cache
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\obj\Debug\SSO.Persistence.csproj.CopyComplete
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\obj\Debug\SSO.Persistence.dll
+D:\VTC_SSO\VTC_Telecom\SSO.Persistence\obj\Debug\SSO.Persistence.pdb

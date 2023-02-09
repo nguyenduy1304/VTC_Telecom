@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+    var baselink = "http://vtcsso.com";
+    var baselink1 = "https://localhost:44350";
+}
+
+<h3> vui lòng click chọn đăng nhập</h3>
+<h5>@ViewBag.ERROR</h5>
+<h5>@ViewBag.Cookie</h5>
+<h5>@ViewBag.message</h5>
+<h5>Chào mừng: <span style="color:blue">@Session["Username"]</span></h5>
+<hr />
+
+<h5>Thông tin Token</h5>
+@if (Model != null)
+{
+    <h5>User ID: @Model.Userid</h5>
+    <h5>User Name: @Model.UserName</h5>
+    <h5>Permission: @Model.Permission</h5>
+}
+
+<a href="@baselink1/?appid=vtc001" class="btn btn-success"> Đăng nhập </a>
+<hr />
+
+<a href="@Url.Action("CheckCookie","Home")" class="btn btn-success"> Check cookie </a>
+
+<a href="@Url.Action("GetClaimToken","Home")" class="btn btn-success"> Get Token </a>
+
+<a href="@Url.Action("LogOutAsync","Home")" class="btn btn-success"> Đăng xuất </a>

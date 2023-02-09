@@ -1,0 +1,94 @@
+﻿@model SSO.Persistence.Domain.VTC_Apps
+@using SSO.Persistence.Domain
+@using SSO.Application.Services
+@using SSO.Contract.Constant;
+
+@{
+    ViewBag.Title = "UpdateApp";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+    string HOME = string.Format(ContractURL.HomePage);
+    string homepage = URL + HOME;
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item"><a href="@homepage">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="@URL/apps">Ứng dụng</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cập nhật thông tin ứng dụng</li>
+    </ol>
+</nav>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="card card_border py-2 mb-4">
+        <div class="card-body">
+            <form>
+                <input type="hidden" value="@Model.Id" id="Id" name="Id" />
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="AppId" class="input__label">ID ứng dụng</label>
+                        <input type="text" class="form-control input-style" id="AppId" name="AppId" required value="@Model.AppId" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="Name" class="input__label">Tên ứng dụng</label>
+                        <input type="text" class="form-control input-style" id="Name" name="Name" required value="@Model.Name" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="Domain" class="input__label">Domain</label>
+                        <input type="text" class="form-control input-style" id="Domain" name="Domain" required value="@Model.Domain" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="AppId" class="input__label">Khóa bí mật</label>
+                        <input type="text" class="form-control input-style" id="SecretKey" name="SecretKey" required value="@Model.SecretKey" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="Name" class="input__label">Ghi chú</label>
+                        <input type="text" class="form-control input-style" id="Note" name="Note" required value="@Model.Note" />
+                    </div>
+                </div>
+
+                <div class="btn btn-primary btn-style mt-4" onclick="SaveObject()">Lưu thay đổi</div>
+            </form>
+        </div>
+    </div>
+}
+
+<script>
+    function SaveObject() {
+        var id = $('#Id').val();
+        var name = $('#Name').val();
+        var domain = $('#Domain').val();
+        var appid = $('#AppId').val();
+        var secretkey = $('#SecretKey').val();
+        var note = $('#Note').val();
+        var form = new FormData();
+        form.append('Id', id);
+        form.append('Name', name);
+        form.append('Domain', domain);
+        form.append('AppId', appid);
+        form.append('SecretKey', secretkey);
+        form.append('Note', note);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "@URL/apps/UpdateAppPost", true);
+        xhr.timeout = 30000;
+        xhr.ontimeout = function () {
+            alert('Hệ thống tạm thời không khả dụng! Thử lại sau ít phút.');
+        }
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var ms = JSON.parse(xhr.responseText);
+                if (ms.Data.status == "OK") {
+                    window.location.href = "@URL/apps"
+                }
+                if (ms.Data.status == "ER") {
+                    alert('Không tìm thấy dữ liệu cần xóa.');
+                }
+            }
+        }
+        xhr.send(form);
+    }
+</script>
+

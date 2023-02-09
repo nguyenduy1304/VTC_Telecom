@@ -1,0 +1,133 @@
+﻿@using SSO.Persistence.Domain
+@using SSO.Contract.Constant
+@using SSO.Application.Services
+@{
+    ViewBag.Title = "UpdateGroup";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+    string HOME = string.Format(ContractURL.HomePage);
+    string homepage = URL + HOME;
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item"><a href="@homepage">Trang chủ </a></li>
+        <li class="breadcrumb-item"><a href="@URL/groups">Nhóm</a></li>
+        <li class="breadcrumb-item active" aria-current="page">cập nhật nhóm mới</li>
+    </ol>
+</nav>
+<section class="forms">
+    <div class="card card_border py-2 mb-4">
+        <div class="card-body">
+            <form>
+                <input type="hidden" value="@Model.Id" id="Id" name="Id" />
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="Name" class="input__label">Tên nhóm</label>
+                        <input type="text" class="form-control input-style" id="Name" name="Name" required value="@Model.Name"/>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="Description" class="input__label">Mô tả của nhóm</label>
+                        <input type="text" class="form-control input-style" id="Description" name="Description" required value="@Model.Description"/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="Name" class="input__label">Quyền thuộc về ứng dụng </label><br />
+                        @{
+                            var processedElements = new HashSet<String>();
+                            var processedElementsNull = new HashSet<String>();
+
+                            foreach (var grouprole in ViewBag.GroupRole)
+                            {
+                                foreach (var role in ViewBag.Role)
+                                {
+                                    if (!processedElements.Contains(role.Id) && role.Id == grouprole.RoleId)
+                                    {
+                                        <input type="checkbox" class="RoleId" value="@role.Id" checked="checked" />
+                                        <label for="@role.Name"> @role.Name &emsp;</label> <br />
+                                        processedElements.Add(role.Id);
+
+                                    }
+                                    else
+                                    {
+                                        processedElementsNull.Add(role.Id);
+                                    }
+
+                                }
+                            }
+                            foreach (var item in processedElementsNull)
+                            {
+                                if (!processedElements.Contains(item))
+                                {
+                                    foreach (var role in ViewBag.Role)
+                                    {
+                                        if (item == role.Id)
+                                        {
+                                            <input type="checkbox" class="RoleId" value="@item" />
+                                            <label for="@role.Name"> @role.Name &emsp;</label> <br />
+                                        }
+                                    }
+
+                                }
+                            }
+                            if (processedElements.Count() == 0)
+                            {
+                                foreach (var role in ViewBag.Role)
+                                {
+                                    <input type="checkbox" class="RoleId" value="@role.Id" />
+                                    <label for="@role.Name"> @role.Name &emsp;</label> <br />
+                                }
+
+                            }
+                        }
+
+
+                    </div>
+                </div>
+                <div class="btn btn-primary btn-style mt-4" onclick="SaveObject()">Lưu thay đổi</div>
+            </form>
+            <hr />
+        </div>
+    </div>
+</section>
+
+<script>
+    function SaveObject() {
+        var id = $('#Id').val();
+        var name = $('#Name').val();
+         var description = $('#Description').val();
+        var roleid = '';
+         $('.RoleId:checked').each(function () {
+             if (roleid != '') roleid += ';';
+             roleid += $(this).val();
+        });
+         if (name.length = 0 || roleid.length == 0) {
+            alert('Chưa nhập đầy đủ thông tin, vui lòng kiểm tra lại.');
+        } else {
+             var form = new FormData();
+             form.append('Id', id);
+            form.append('Name', name);
+            form.append('Description', description);
+             form.append('RoleId', roleid);
+            var xhr = new XMLHttpRequest();
+             xhr.open("POST", "@URL/Groups/UpdateGroupPost", true);
+            xhr.timeout = 30000;
+            xhr.ontimeout = function () {
+                alert('Hệ thống tạm thời không khả dụng! Thử lại sau ít phút.');
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var ms = JSON.parse(xhr.responseText);
+                    if (ms.Data.status == "OK") {
+                        window.location.href = "@URL/groups"
+                    }
+                }
+            }
+            xhr.send(form);
+        }
+    }
+</script>
+
+
+

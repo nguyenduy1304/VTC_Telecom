@@ -1,0 +1,81 @@
+﻿@using SSO.Persistence.Domain
+@using SSO.Contract.Constant;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+    string HOME = string.Format(ContractURL.HomePage);
+    string homepage = URL + HOME;
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item"><a href="@homepage">Trang chủ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Nhóm</li>
+    </ol>
+</nav>
+
+<section class="forms">
+    <div class="card card_border py-2 mb-4">
+        <div class="card-body">
+            <div class="add_user">
+                <a href="@Url.Action("AddGroup","Groups")">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+            </div>
+            <table>
+                <tr>
+                    <th>Tên Nhóm </th>
+                    <th>Mô tả nhóm</th>
+                    <th></th>
+                </tr>
+                @foreach (VTC_Groups vTC_Groups in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("UpdateGroup","Groups", new {id = vTC_Groups.Id})">
+                                @vTC_Groups.Name
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateGroup","Groups", new {id = vTC_Groups.Id})">
+                                @vTC_Groups.Description
+                            </a>
+                        </td>
+
+                        <td style="text-align:center">
+                            <div onclick="DeleteObject('@vTC_Groups.Id')"><i class="fas fa-user-minus"></i></div>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    function DeleteObject(id) {
+        var form = new FormData();
+        form.append('id', id);
+        if (confirm("Bạn có chắc muốn xóa ứng dụng Bấm vào nút OK để tiếp tục") == true) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "@URL/groups/deletegroup", true);
+            xhr.timeout = 30000;
+            xhr.ontimeout = function () {
+                alert('Hệ thống tạm thời không khả dụng! Thử lại sau ít phút.');
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var ms = JSON.parse(xhr.responseText);
+                    if (ms.Data.status == "OK") {
+                        window.location.href = "@URL/groups"
+                    }
+                }
+            }
+            xhr.send(form);
+        }
+    }
+</script>
+
+

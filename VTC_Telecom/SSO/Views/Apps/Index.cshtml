@@ -1,0 +1,123 @@
+﻿@using SSO.Persistence.Domain
+@using SSO.Contract.Constant;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+    string HOME = string.Format(ContractURL.HomePage);
+    string homepage = URL + HOME;
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item"><a href="@homepage">Trang chủ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Ứng dụng</li>
+    </ol>
+</nav>
+<section class="forms">
+    <div class="card card_border py-2 mb-4">
+        <div class="card-body">
+            @using (Html.BeginForm())
+            {
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label for="AppId" class="input__label">ID ứng dụng</label>
+                            <input type="text" class="form-control input-style" id="AppId" name="AppId" required
+                                   placeholder="Nhập id ứng dụng" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'Nhập id ứng dụng';}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="Name" class="input__label">Tên ứng dụng</label>
+                            <input type="text" class="form-control input-style" id="Name" name="Name" required
+                                   placeholder="Nhập tên ứng dụng" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'Nhập tên ứng dụng';}">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="Domain" class="input__label">Domain</label>
+                            <input type="text" class="form-control input-style" id="Domain" name="Domain" required
+                                   placeholder="Nhập Domain ứng dụng" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'Nhập Domain ứng dụng';}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="Domain" class="input__label">Ghi chú</label>
+                            <input type="text" class="form-control input-style" id="Note" name="Note" required
+                                   placeholder="Nhập ghi chú" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'Nhập ghi chú';}">
+                        </div>
+                    </div>
+                    <p style="color:red">@ViewBag.ERROR</p>
+                    <input type="submit" class="btn btn-primary btn-style mt-4" value="Thêm ứng dụng mới" />
+                </form>
+            }
+            <hr />
+            <table>
+                <tr>
+                    <th>ID ứng dụng</th>
+                    <th>Tên ứng dụng</th>
+                    <th>Tên miền</th>
+                    <th>Khóa bí mật</th>
+                    <th>Ghi chú</th>
+                    <th></th>
+                </tr>
+                @foreach (VTC_Apps vTC_Apps in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("UpdateApp","Apps", new {id = vTC_Apps.Id})">
+                                @vTC_Apps.AppId
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateApp","Apps", new {id = vTC_Apps.Id})">
+                                @vTC_Apps.Name
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateApp","Apps", new {id = vTC_Apps.Id})">
+                                @vTC_Apps.Domain
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateApp","Apps", new {id = vTC_Apps.Id})">
+                                @vTC_Apps.SecretKey
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("UpdateApp","Apps", new {id = vTC_Apps.Id})">
+                                @vTC_Apps.Note
+                            </a>
+                        </td>
+                        <td style="text-align:center">
+                            <div onclick="DeleteObject('@vTC_Apps.Id')"><i class="fas fa-user-minus"></i></div>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</section>
+<script>
+    function DeleteObject(app) {
+        var form = new FormData();
+        form.append('id', app);
+        if (confirm("Bạn có chắc muốn xóa ứng dụng Bấm vào nút OK để tiếp tục") == true) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "@URL/apps/deleteapp", true);
+            xhr.timeout = 30000;
+            xhr.ontimeout = function () {
+                alert('Hệ thống tạm thời không khả dụng! Thử lại sau ít phút.');
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var ms = JSON.parse(xhr.responseText);
+                    if (ms.Data.status == "OK") {
+                        window.location.href = "@URL/apps"
+                    }
+                }
+            }
+            xhr.send(form);
+        }
+    }
+</script>
+
+

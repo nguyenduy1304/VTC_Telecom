@@ -1,0 +1,57 @@
+﻿
+@{
+    Layout = null;
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="~/Content/Login/style.css" rel="stylesheet" type='text/css' />
+    <title>VTC SSO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text.css' />
+</head>
+
+<body>
+    <div class="main1">
+        @using (Html.BeginForm())
+        {
+            <form>
+                <h1><span>Tạo Tài Khoản</span></h1>
+                <div class="inset">
+                    <p>
+                        <label for="username">TÊN ĐĂNG NHẬP</label>
+                        <input type="text" name="UserName" id="UserName" required placeholder="Tên đăng nhập" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'Tên đăng nhập';}">
+                    </p>
+                    <p>
+                        <label for="password">MẬT KHẨU</label>
+                        <input type="password" name="PassWord" id="PassWord" required placeholder="Mật khẩu" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'Mật khẩu';}">
+                    </p>
+                    <p>
+                        <label for="FullName">Tên</label>
+                        <input type="text" name="FullName" id="FullName" required placeholder="Nhập họ tên" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'Nhập họ tên';}">
+                    </p>
+                    <p>
+                        <label for="Email">Email</label>
+                        <input type="email" name="Email" id="Email" required placeholder="Email" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'Email';}">
+                    </p>
+                    <p>
+                        <label for="Phone">SĐT</label>
+                        <input type="text" name="Phone" id="Phone" required placeholder="SĐT" onfocus="this.placeholder = '';" onblur="if (this.placeholder == '') {this.placeholder = 'SĐT';}">
+                    </p>
+
+                    <div id="AlertBox">
+                        <p style="color:red">@ViewBag.ERROR</p>
+                    </div>
+                </div>
+                <p class="p-container">
+                    <input type="submit" value="Đăng ký">
+                </p>
+            </form>
+        }
+    </div>
+</body>
+</html>

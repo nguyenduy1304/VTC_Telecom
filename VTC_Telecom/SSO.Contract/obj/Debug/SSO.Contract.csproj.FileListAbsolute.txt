@@ -1,0 +1,12 @@
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\bin\Debug\SSO.Contract.dll
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\bin\Debug\SSO.Contract.pdb
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\bin\Debug\SSO.Persistence.dll
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\bin\Debug\EntityFramework.dll
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\bin\Debug\SSO.Persistence.pdb
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\bin\Debug\SSO.Persistence.dll.config
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\bin\Debug\EntityFramework.xml
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\obj\Debug\SSO.Contract.csproj.AssemblyReference.cache
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\obj\Debug\SSO.Contract.csproj.CoreCompileInputs.cache
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\obj\Debug\SSO.Contract.csproj.CopyComplete
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\obj\Debug\SSO.Contract.dll
+D:\VTC_SSO\VTC_Telecom\SSO.Contract\obj\Debug\SSO.Contract.pdb

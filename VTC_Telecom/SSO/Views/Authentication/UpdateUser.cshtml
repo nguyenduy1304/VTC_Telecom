@@ -1,0 +1,153 @@
+﻿@model SSO.Persistence.Domain.VTC_Users
+@using SSO.Contract.Constant;
+@{
+    ViewBag.Title = "UpdateUser";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+    string HOME = string.Format(ContractURL.HomePage);
+    string homepage = URL + HOME;
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb my-breadcrumb">
+        <li class="breadcrumb-item"><a href="@homepage">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="@URL/authentication/users">Quản lý tài khoản</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Cập nhật tài khoản</li>
+
+    </ol>
+</nav>
+    <div class="card card_border py-2 mb-4">
+        <div class="card-body">
+            <form>
+                <input type="hidden" value="@Model.Id" id="id" />
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="FullName" class="input__label">Họ</label>
+                        <input type="text" class="form-control input-style" id="FullName" required
+                               value="@Model.FullName" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="Email" class="input__label">Email</label>
+                        <input type="text" class="form-control input-style" id="Email" required value="@Model.Email">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="Phone" class="input__label">Số điện thoại</label>
+                        <input type="text" class="form-control input-style" id="Phone" required value="@Model.Phone">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="Birthday" class="input__label">Ngày sinh</label>
+                        <input type="date" class="form-control input-style" id="Birthday" required value="@String.Format("{0:yyyy-MM-dd}", Model.Birthday)">
+                    </div>
+                </div>
+                @if (Model.Address == null || Model.Address == "")
+                {
+                    <div class="form-group">
+                        <label for="Address" class="input__label">Địa chỉ</label>
+                        <input type="text" class="form-control input-style" id="Address"
+                               placeholder="Chưa cập nhật" />
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label for="Address" class="input__label">Địa chỉ</label>
+                        <input type="text" class="form-control input-style" id="Address"
+                               value="@Model.Address" />
+                    </div>
+                }
+            <div class="form-group">
+                <label for="Address" class="input__label">Nhóm quyền &emsp;</label> <br />
+                @{
+                    var processedElements = new HashSet<String>();
+                    var processedElementsNull = new HashSet<String>();
+                    foreach (var groupuser in ViewBag.GroupUser)
+                    {
+                        foreach (var group in ViewBag.Groups)
+                        {
+                            if (!processedElements.Contains(group.Id))
+                            {
+                                if (groupuser.GroupId == group.Id)
+                                {
+                                    <input type="checkbox" class="GroupId" checked="checked" value="@group.Id" />
+                                    <label for="@group.Name"> @group.Name &emsp;</label> <br />
+                                    processedElements.Add(group.Id);
+                                }
+                                else
+                                {
+                                    processedElementsNull.Add(group.Id);
+                                }
+                            }
+                        }
+                    }
+                    foreach (var item in processedElementsNull)
+                    {
+                        if (!processedElements.Contains(item))
+                        {
+                            foreach (var group in ViewBag.Groups)
+                            {
+                                if (item == group.Id)
+                                {
+                                    <input type="checkbox" class="GroupId" value="@group.Id" />
+                                    <label for="@group.Name"> @group.Name &emsp;</label> <br />
+                                }
+                            }
+
+                        }
+                    }
+                    if (processedElements.Count() == 0)
+                    {
+                        foreach (var group in ViewBag.Groups)
+                        {
+                            <input type="checkbox" class="GroupId" value="@group.Id" />
+                            <label for="@group.Name"> @group.Name &emsp;</label> <br />
+                            
+                        }
+
+                    }
+                }
+            </div>
+                <input class="btn btn-primary btn-style mt-4" value="Lưu thay đổi" onclick="SaveObject()" />
+            </form>
+        </div>
+    </div>
+<script>
+    function SaveObject() {
+        var id = $('#id').val();
+        var fullname = $('#FullName').val();
+        var email = $('#Email').val();
+        var phone = $('#Phone').val();
+        var birthday = $('#Birthday').val();
+        var address = $('#Address').val();
+        var groupid = '';
+        $('.GroupId:checked').each(function () {
+            if (groupid != '') groupid += ';';
+            groupid += $(this).val();
+        });
+
+        var form = new FormData();
+        form.append('id', id);
+        form.append('fullname', fullname);
+        form.append('email', email);
+        form.append('phone', phone);
+        form.append('birthday', birthday);
+        form.append('address', address);
+        form.append('groupid', groupid);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "@URL/authentication/updateuserpost", true);
+            xhr.timeout = 30000;
+            xhr.ontimeout = function () {
+                alert('Hệ thống tạm thời không khả dụng! Thử lại sau ít phút.');
+        }
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var ms = JSON.parse(xhr.responseText);
+                if (ms.Data.status == "OK") {
+                    window.location.href = "@URL/authentication/users"
+                }
+            }
+        }
+        xhr.send(form);
+    }
+</script>

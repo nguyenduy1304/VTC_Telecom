@@ -1,0 +1,153 @@
+﻿@{
+    string URL = String.Concat(Request.Url.Scheme, "://", Request.Url.Host, (Request.Url.IsDefaultPort ? "" : String.Concat(":", Request.Url.Port)));
+}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>VTC SSO ADMIN</title>
+    <link rel="shortcut icon" href="~/Content/images/ICONVTC.png" type="image/png" />
+    <link href="~/Content/Admin/css/style-starter.css" rel="stylesheet" />
+    <link href="//fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+</head>
+<body class="sidebar-menu-collapsed">
+    <div class="se-pre-con"></div>
+    <section>
+        <div class="sidebar-menu sticky-sidebar-menu">
+            <div class="logo">
+                <h1><a href="index.html">VTC Telecom</a></h1>
+            </div>
+            <div class="logo-icon text-center">
+                <a href="#"><img src="~/Content/Admin/images/logo.png" alt="logo-icon"> </a>
+            </div>
+
+            <div class="sidebar-menu-inner">
+                <ul class="nav nav-pills nav-stacked custom-nav">
+                    <li>
+                        <a href="#"><i class="fas fa-tachometer-alt"></i><span> Dashboard</span></a>
+                    </li>
+                    @*<li class="menu-list">
+            <a href="#">
+                <i class="fa fa-cogs"></i>
+                <span>Elements <i class="lnr lnr-chevron-right"></i></span>
+            </a>
+            <ul class="sub-menu-list">
+                <li><a href="carousels.html">Carousels</a> </li>
+                <li><a href="cards.html">Default cards</a> </li>
+                <li><a href="people.html">People cards</a></li>
+            </ul>
+        </li>*@
+                    <li><a href="@URL/users"><i class="fas fa-address-card"></i><span>Tài khoản</span></a></li>
+                    <li><a href="@URL/apps"><i class="fas fa-th"></i> <span>Ứng dụng</span></a></li>
+                    <li><a href="@URL/groups"><i class="fas fa-users"></i><span>Nhóm người dùng</span></a></li>
+                    <li><a href="@URL/roles"><i class="fas-solid fas-ruler-triangle"></i><span>Quyền truy cập</span></a></li>
+                </ul>
+
+                <a class="toggle-btn">
+                    <i class="fa fa-angle-double-left menu-collapsed__left"><span>Thu gọn taskbar</span></i>
+                    <i class="fa fa-angle-double-right menu-collapsed__right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="header sticky-header">
+            <div class="menu-right">
+                <div class="navbar user-panel-top">
+                    @if (Session["Username"] != null)
+                    {
+                        <div class="profile_details">
+                            <ul>
+                                <li class="dropdown profile_details_drop">
+
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenu3" aria-haspopup="true"
+                                       aria-expanded="false">
+                                        @Session["Username"]
+                                    </a>
+                                    <ul class="dropdown-menu drp-mnu" aria-labelledby="dropdownMenu3">
+                                        <li class="user-info">
+                                            <h5 class="user-name">John Deo</h5>
+                                            <span class="status ml-2">Available</span>
+                                        </li>
+                                        <li> <a href="#"><i class="lnr lnr-user"></i>My Profile</a> </li>
+                                        <li> <a href="#"><i class="lnr lnr-cog"></i>Setting</a> </li>
+                                        <li class="logout"> <a href="#sign-up.html"><i class="fa fa-power-off"></i> Logout</a> </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="container-fluid content-top-gap">
+                @RenderBody()
+            </div>
+        </div>
+    </section>
+    <footer class="dashboard">
+        <p>
+            &copy 2023 VTC Telecom. All Rights Reserved | Design by <a href="#" target="_blank">VTC Telecom</a>
+        </p>
+    </footer>
+    <button onclick="topFunction()" id="movetop" class="bg-primary" title="Go to top">
+        <span class="fa fa-angle-up"></span>
+    </button>
+    <script>
+        window.onscroll = function () {
+            scrollFunction()
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("movetop").style.display = "block";
+            } else {
+                document.getElementById("movetop").style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+    <script src="~/Content/Admin/js/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/Admin/js/jquery-1.10.2.min.js"></script>
+    <script src="~/Content/Admin/js/Chart.min.js"></script>
+    <script src="~/Content/Admin/js/utils.js"></script>
+    <script src="~/Content/Admin/js/bar.js"></script>
+    <script src="~/Content/Admin/js/linechart.js"></script>
+    <script src="~/Content/Admin/js/jquery.nicescroll.js"></script>
+    <script src="~/Content/Admin/js/scripts.js"></script>
+    <script>
+        var closebtns = document.getElementsByClassName("close-grid");
+        var i;
+
+        for (i = 0; i < closebtns.length; i++) {
+            closebtns[i].addEventListener("click", function () {
+                this.parentElement.style.display = 'none';
+            });
+        }
+    </script>
+    <script>
+        $(function () {
+            $('.sidebar-menu-collapsed').click(function () {
+                $('body').toggleClass('noscroll');
+            })
+        });
+    </script>
+    <script src="~/Content/Admin/js/modernizr.js"></script>
+    <script>
+        $(window).load(function () {
+            $(".se-pre-con").fadeOut("slow");;
+        });
+    </script>
+    <script src="~/Content/Admin/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
